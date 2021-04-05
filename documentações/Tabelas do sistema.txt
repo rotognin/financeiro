@@ -1,0 +1,79 @@
+﻿Tabelas do sistema financeiro_novo
+
+- 4 tabelas:
+  - Usuários do sistema
+  - Endereços (ligados aos usuários)
+  - Locais (lugares onde estão acontecendo as movimentações)
+  - Dinheiro (movimentações gerais de todos os usuários)
+
+Nome do banco: financeiro_db
+
+Detalhes das tabelas
+
+- Tabela de usuários
+  - usuarios_tb
+    - usu_id          - Identificação
+    - usu_nome        - Nome completo
+    - usu_login       - Login (deve ser único)
+    - usu_senha       - Senha (com sha1)
+    - usu_email       - E-mail
+    - usu_flag        - Flag para controle administrativo (usuário bloqueado,
+                        com pendências, impedido de acessar)
+
+- Tabela de endereços
+  - enderecos_tb
+    - end_id          - Identificação
+    - end_usu_id      - Código do usuário (FK)
+    - end_descricao   - Descrição do local (viagem, praia, trabalho...)
+    - end_endereco    - Nome da rua/avenida/etc...
+    - end_numero      - Número da casa/apartamento
+    - end_complemento - Complemento (bloco, sala, etc...)
+    - end_bairro      - Bairro
+    - end_cidade      - Cidade
+    - end_estado      - UF
+    - end_cep         - CEP
+    - end_pais        - País
+    - end_padrao      - Flag indicando se o endereço é padrão ou não
+    - end_ativo       - Se o endereço está ativo ou não
+
+- Tabela de Locais
+  - locais_tb
+    - loc_id          - Identificação
+    - loc_usu_id      - Código do usuário (FK)
+    - loc_end_usu     - Endereço de onde o usuário está
+    - loc_descricao   - Descrição do local
+    - loc_observacao  - Alguma observação adicional
+    - loc_ativo       - Se o local está ativo ou não
+    - loc_banco       - Se o local é um banco (carteira) ou não
+    - loc_universal   - Se o local está atrelado a um endereço ou não
+
+- Tabela de movimentação
+  - movimentos_tb
+    - mov_id            - Identificação
+    - mov_usu_id        - Código do usuário
+    - mov_end_usu       - Endereço de onde o usuário está
+    - mov_valor_credito - Valor que está sendo adicionado (entrando)
+    - mov_valor_debito  - Valor que está sendo subtraído (saindo)
+    - mov_local_credito - Local onde o dinheiro está entrando
+    - mov_local_debito  - Local de onde o dinheiro está saindo
+    - mov_data_hora     - Data e hora atual da movimentação
+    - mov_descricao     - Alguma descrição que o usuário queira adicionar
+    - mov_tipo          - Tipo da movimentação
+
+- Variáveis de sessão do usuário logado
+   $_SESSION['usu_logado']     - (usu_id) Código do usuário logado
+   $_SESSION['usu_nome']       - (usu_nome) Nome do usuário logado
+   $_SESSION['end_usu_logado'] - (end_id) Código do endereço do usuário logado
+   $_SESSION['msg_erro']       - Mensagem de erro para as páginas
+
+- Verificações ao montar as movimentações:
+   - Compra: Local de Entrada/Crédito (não-banco)
+             Local de Saída/Débito (banco)
+   - Entrada de Valor: Local de Entrada (banco)
+   - Venda: Local de Entrada/Crédito (banco)
+   - Transferência: Local de Entrada/Crédito (banco)
+                    Local de Saída/Débito (banco)
+   - Saída de Valor: Local de Saída (banco)
+
+- Comandos para seleção de valores
+SELECT SUM(mov_valor_credito) as 'Credito' FROM `movimentos_tb` WHERE mov_local_credito = 5
