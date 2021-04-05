@@ -1,4 +1,4 @@
-#Controle Financeiro
+# Controle Financeiro
 
 Esse sistema foi desenvolvido em 2015, quando eu estava fazendo o curso técnico em informática para internet, 
 no Senac em Piracicaba, SP.
